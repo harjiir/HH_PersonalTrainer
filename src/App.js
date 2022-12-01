@@ -5,7 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Home from './components/Home.js'
-import Customers from './components/Customers.js'
+import CustomerList from './components/CustomerList.js'
 import TrainingList from './components/TrainingList.js'
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
       <div class="content">
         {value === '1' && <Home />}
         {value === '2' && <TrainingList />}
-        {value === '3' && <Customers />}
+        {value === '3' && <CustomerList />}
       </div>
     </div>
   );
