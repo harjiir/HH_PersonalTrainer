@@ -1,57 +1,60 @@
 import React, { useState } from "react";
 import { Button } from '@mui/material';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-material.css';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import Box from '@mui/material/Box';
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-material.css';
-
-function Addtraining({ addTraining }) {
+function Edittraining({ updateTraining, params }) {
     const [open, setOpen] = useState(false);
 
     // Training state
     const [training, setTraining] = useState({
-        date: "",
-        duration: "",
-        activity: "",
+        date: '',
+        duration: '',
+        activity: '',
     });
 
-    // Add New Training button and opening a form
+    // Edit Training button and opening a form with previous infos
     const handleClickOpen = () => {
-        console.log('Add new training button handled');
+        console.log('Edit training button handled');
         setOpen(true);
+        setTraining({
+            date: params.data.date,
+            duration: params.data.duration,
+            activity: params.data.activity,
+        })
     }
 
-    // If save button is pressed in the training form
+    // Closing form
     const handleClose = () => {
-        console.log('Save training button handled')
-        addTraining(training);
+        console.log('Form closed')
         setOpen(false);
     }
 
-    // If cancel button is pressed in the training form
+    // if save button is pressed in the form, update training
+    const handleSave = () => {
+        updateTraining(training, params.value);
+        setOpen(false);
+    }
+
+    // If cancel button is pressed in the car form
     const handleCancel = () => {
-        console.log('Handle cancel called')
+        console.log('Handle cancel')
         setOpen(false);
     }
 
-    // Changing values for the training
+    // Changing values for the car
     const inputChanged = (event) => {
         setTraining({ ...training, [event.target.name]: event.target.value })
     }
+
     return (
         <div>
-            <Box sx={{ width: '100%' }}>
-                <Button variant="outlined" onClick={handleClickOpen}> + New Training Session</Button>
-            </Box>
+            <Button className="addButton" variant="outlined" onClick={handleClickOpen}>EDIT</Button>
             <Dialog onClose={handleClose} open={open}>
-                <DialogTitle>New Training</DialogTitle>
+                <DialogTitle>New Car</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -85,13 +88,12 @@ function Addtraining({ addTraining }) {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Save</Button>
+                    <Button onClick={handleSave}>Save</Button>
                     <Button onClick={handleCancel}>Cancel</Button>
                 </DialogActions>
             </Dialog>
         </div>
     );
-
 }
 
-export default Addtraining;
+export default Edittraining;

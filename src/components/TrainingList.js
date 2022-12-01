@@ -5,11 +5,13 @@ import 'ag-grid-community/styles/ag-theme-material.css';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Addtraining from "./Addtraining";
+import Edittraining from "./Edittraining";
+import dayjs from 'dayjs'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
-function Trainings() {
+function TrainingList() {
 
     // List of trainings
     const [trainings, setTrainings] = useState([]);
@@ -21,11 +23,10 @@ function Trainings() {
             width: 200,
             sortable: true,
             filter: true,
-            cellRenderer: (data) => {
-                return data.value ? (new Date(data.value)).toLocaleDateString() : '';
-            }
+            valueFormatter: (params) => { return dayjs(params.value).format('DD.MM.YYYY --- hh:mm') }
         },
         {
+            headerName: "Duration (minutes)",
             field: "duration",
             width: 200,
             sortable: true,
@@ -33,31 +34,29 @@ function Trainings() {
         },
         {
             field: "activity",
-            width: 200,
+            width: 400,
             sortable: true,
             filter: true
         },
         {
             field: 'customer',
-            width: 176,
+            width: 400,
             sortable: true,
             filter: true,
         },
         {
-            field: '_links.self.href',
             headerName: '',
+            field: 'links.href',
             width: 100,
             cellRenderer: params =>
-                <IconButton color="error">
-                    <DeleteIcon />
-                </IconButton>
+                <Edittraining updateTraining={updateTraining} params={params} />
         },
         {
-            field: '_links.self.href',
             headerName: '',
+            field: 'links.href',
             width: 100,
             cellRenderer: params =>
-                <IconButton color="error">
+                <IconButton color="error" onClick={() => deleteTraining(params.value)}>
                     <DeleteIcon />
                 </IconButton>
         }
@@ -79,7 +78,7 @@ function Trainings() {
 
     // Adding a new training with REST interface
     const addTraining = (training) => {
-        console.log("Trainings addTraining method")
+        console.log("TrainingList addTraining method")
         fetch("https://customerrest.herokuapp.com/api/trainings", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -91,6 +90,34 @@ function Trainings() {
                 }
             });
     };
+
+    // Delete Training Method
+    const deleteTraining = (link) => {
+        console.log("Delete method")
+        fetch(link, {
+            method: 'DELETE'
+        })
+            .then((response) => {
+                if (response.ok) {
+                    fetchTrainings();
+                }
+            })
+    }
+
+    // Update Training function
+    const updateTraining = (updateTraining, link) => {
+        console.log("Edit method")
+        fetch(link, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateTraining),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    fetchTrainings();
+                }
+            })
+    }
 
     return (
         <div>
@@ -109,4 +136,4 @@ function Trainings() {
     );
 }
 
-export default Trainings;
+export default TrainingList;

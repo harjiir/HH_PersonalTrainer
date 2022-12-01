@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Home from './components/Home.js'
 import Customers from './components/Customers.js'
-import Trainings from './components/Trainings.js'
+import TrainingList from './components/TrainingList.js'
 
 function App() {
   const [value, setValue] = React.useState('1');
@@ -39,7 +39,7 @@ function App() {
       </AppBar>
       <div class="content">
         {value === '1' && <Home />}
-        {value === '2' && <Trainings />}
+        {value === '2' && <TrainingList />}
         {value === '3' && <Customers />}
       </div>
     </div>
