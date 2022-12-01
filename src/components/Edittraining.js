@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-function Edittraining({ updateTraining, params }) {
+function Edittraining(props) {
     const [open, setOpen] = useState(false);
 
     // Training state
@@ -21,22 +21,21 @@ function Edittraining({ updateTraining, params }) {
         console.log('Edit training button handled');
         setOpen(true);
         setTraining({
-            date: params.data.date,
-            duration: params.data.duration,
-            activity: params.data.activity,
+            date: props.training.data.date,
+            duration: props.training.data.duration,
+            activity: props.training.data.activity,
         })
     }
 
     // Closing form
     const handleClose = () => {
-        console.log('Form closed')
         setOpen(false);
     }
 
     // if save button is pressed in the form, update training
     const handleSave = () => {
-        updateTraining(training, params.value);
-        setOpen(false);
+        props.editTraining(props.training.value, training);
+        handleClose();
     }
 
     // If cancel button is pressed in the car form
@@ -54,7 +53,7 @@ function Edittraining({ updateTraining, params }) {
         <div>
             <Button className="addButton" variant="outlined" onClick={handleClickOpen}>EDIT</Button>
             <Dialog onClose={handleClose} open={open}>
-                <DialogTitle>New Car</DialogTitle>
+                <DialogTitle>Edit Training</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus

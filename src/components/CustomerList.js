@@ -15,6 +15,64 @@ function CustomerList() {
     // List of trainings
     const [customers, setCustomers] = useState([]);
 
+    // Fetching customers from Heroku link
+    const fetchCustomers = () => {
+        fetch("https://customerrest.herokuapp.com/api/customers")
+            .then((response) => response.json())
+            .then((data) => setCustomers(data.content));
+    };
+
+    // Fetching customers everytime page loads
+    // see fetchCustomers method
+    useEffect(() => {
+        fetchCustomers();
+        console.log(customers);
+    }, []);
+
+    // Adding a new customer with REST interface
+    const addCustomer = (customer) => {
+        console.log("CustomerList addCustomer method")
+        fetch("https://customerrest.herokuapp.com/api/customers", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(customer),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    fetchCustomers();
+                }
+            });
+    };
+
+    // Delete Customer Method
+    const deleteCustomer = (url) => {
+        if (window.confirm('Are you sure?')) {
+            fetch(url, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        fetchCustomers();
+                    } else {
+                        alert('Something is wrong');
+                    }
+                })
+                .catch(err => console.error(err))
+        }
+    }
+
+    // Update Customer method
+    const editCustomer = (url, updatedCustomer) => {
+        fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify(updatedCustomer)
+        })
+            .then(_ => {
+                fetchCustomers();
+
+            })
+            .catch(err => console.error(err))
+    }
+
     // Table Columns
     const [columnDefs, setColumnDefs] = useState([
         {
@@ -63,14 +121,14 @@ function CustomerList() {
         },
         {
             headerName: '',
-            field: 'links.href',
+            field: 'links.0.href',
             width: 100,
             cellRenderer: params =>
-                <Editcustomer updateCustomer={updateCustomer} params={params} />
+                <Editcustomer editCustomer={editCustomer} customer={params} />
         },
         {
             headerName: '',
-            field: 'links.href',
+            field: 'links.0.href',
             width: 100,
             cellRenderer: params =>
                 <IconButton color="error" onClick={() => deleteCustomer(params.value)}>
@@ -78,63 +136,6 @@ function CustomerList() {
                 </IconButton>
         }
     ]);
-
-    // Fetching customers from Heroku link
-    const fetchCustomers = () => {
-        fetch("https://customerrest.herokuapp.com/api/customers")
-            .then((response) => response.json())
-            .then((data) => setCustomers(data.content));
-    };
-
-    // Fetching customers everytime page loads
-    // see fetchCustomers method
-    useEffect(() => {
-        fetchCustomers();
-        console.log(customers);
-    }, []);
-
-    // Adding a new customer with REST interface
-    const addCustomer = (customer) => {
-        console.log("CustomerList addCustomer method")
-        fetch("https://customerrest.herokuapp.com/api/customers", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(customer),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    fetchCustomers();
-                }
-            });
-    };
-
-    // Delete Customer Method
-    const deleteCustomer = (link) => {
-        console.log("Delete method")
-        fetch(link, {
-            method: 'DELETE'
-        })
-            .then((response) => {
-                if (response.ok) {
-                    fetchCustomers();
-                }
-            })
-    }
-
-    // Update Customer method
-    const updateCustomer = (updateCustomer, link) => {
-        console.log("Edit method")
-        fetch(link, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updateCustomer),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    fetchCustomers();
-                }
-            })
-    }
 
     return (
         <div>

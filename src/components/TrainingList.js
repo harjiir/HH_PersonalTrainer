@@ -16,52 +16,6 @@ function TrainingList() {
     // List of trainings
     const [trainings, setTrainings] = useState([]);
 
-    // Table Columns
-    const [columnDefs, setColumnDefs] = useState([
-        {
-            field: "date",
-            width: 200,
-            sortable: true,
-            filter: true,
-            valueFormatter: (params) => { return dayjs(params.value).format('DD.MM.YYYY --- hh:mm') }
-        },
-        {
-            headerName: "Duration (minutes)",
-            field: "duration",
-            width: 200,
-            sortable: true,
-            filter: true
-        },
-        {
-            field: "activity",
-            width: 400,
-            sortable: true,
-            filter: true
-        },
-        {
-            field: 'customer',
-            width: 400,
-            sortable: true,
-            filter: true,
-        },
-        {
-            headerName: '',
-            field: 'links.href',
-            width: 100,
-            cellRenderer: params =>
-                <Edittraining updateTraining={updateTraining} params={params} />
-        },
-        {
-            headerName: '',
-            field: 'links.href',
-            width: 100,
-            cellRenderer: params =>
-                <IconButton color="error" onClick={() => deleteTraining(params.value)}>
-                    <DeleteIcon />
-                </IconButton>
-        }
-    ]);
-
     // Fetching trainings from Heroku link
     const fetchTrainings = () => {
         fetch("https://customerrest.herokuapp.com/api/trainings")
@@ -91,33 +45,80 @@ function TrainingList() {
             });
     };
 
-    // Delete Training Method
-    const deleteTraining = (link) => {
-        console.log("Delete method")
-        fetch(link, {
-            method: 'DELETE'
-        })
-            .then((response) => {
-                if (response.ok) {
-                    fetchTrainings();
-                }
-            })
+    // Delete Training -method
+    const deleteTraining = (url) => {
+        if (window.confirm('Are you sure?')) {
+            fetch(url, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        fetchTrainings();
+                    } else {
+                        alert('Something is wrong');
+                    }
+                })
+                .catch(err => console.error(err))
+        }
     }
 
     // Update Training function
-    const updateTraining = (updateTraining, link) => {
-        console.log("Edit method")
-        fetch(link, {
+    const editTraining = (url, updatedTraining) => {
+        fetch(url, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updateTraining),
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify(updatedTraining)
         })
-            .then((response) => {
-                if (response.ok) {
-                    fetchTrainings();
-                }
+            .then(_ => {
+                fetchTrainings();
+
             })
+            .catch(err => console.error(err))
     }
+
+    // Table Columns
+    const [columnDefs, setColumnDefs] = useState([
+        {
+            field: "date",
+            width: 200,
+            sortable: true,
+            filter: true,
+            valueFormatter: (params) => { return dayjs(params.value).format('DD.MM.YYYY hh:mm') }
+        },
+        {
+            headerName: "Duration (minutes)",
+            field: "duration",
+            width: 200,
+            sortable: true,
+            filter: true
+        },
+        {
+            field: "activity",
+            width: 400,
+            sortable: true,
+            filter: true
+        },
+        {
+            field: 'customer',
+            width: 400,
+            sortable: true,
+            filter: true,
+        },
+        {
+            headerName: '',
+            field: 'links.0.href',
+            width: 100,
+            cellRenderer: params =>
+                <Edittraining editTraining={editTraining} training={params} />
+        },
+        {
+            headerName: '',
+            field: 'links.0.href',
+            width: 100,
+            cellRenderer: params =>
+                <IconButton color="error" onClick={() => deleteTraining(params.value)}>
+                    <DeleteIcon />
+                </IconButton>
+        }
+    ]);
 
     return (
         <div>

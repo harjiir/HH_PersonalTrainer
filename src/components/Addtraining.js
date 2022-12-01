@@ -58,7 +58,7 @@ function Addtraining({ addTraining }) {
                         name="date"
                         value={training.date}
                         margin="dense"
-                        type="date"
+                        type="datetime-local"
                         fullWidth
                         variant="standard"
                         onChange={inputChanged}

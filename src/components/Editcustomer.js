@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-function Editcustomer({ updateCustomer, params }) {
+function Editcustomer(props) {
     const [open, setOpen] = useState(false);
 
     // Customer state
@@ -25,26 +25,25 @@ function Editcustomer({ updateCustomer, params }) {
         console.log('Edit customer button handled');
         setOpen(true);
         setCustomer({
-            firstname: params.data.firstname,
-            lastname: params.data.lastname,
-            streetaddress: params.data.streetaddress,
-            postcode: params.data.postcode,
-            city: params.data.city,
-            email: params.data.email,
-            phone: params.data.phone,
+            firstname: props.customer.data.firstname,
+            lastname: props.customer.data.lastname,
+            streetaddress: props.customer.data.streetaddress,
+            postcode: props.customer.data.postcode,
+            city: props.customer.data.city,
+            email: props.customer.data.email,
+            phone: props.customer.data.phone,
         })
     }
 
     // Closing form
     const handleClose = () => {
-        console.log('Form closed')
         setOpen(false);
     }
 
     // if save button is pressed in the form, update training
     const handleSave = () => {
-        updateCustomer(customer, params.value);
-        setOpen(false);
+        props.editCustomer(props.customer.value, customer);
+        handleClose();
     }
 
     // If cancel button is pressed in the car form
@@ -62,7 +61,7 @@ function Editcustomer({ updateCustomer, params }) {
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>EDIT</Button>
             <Dialog onClose={handleClose} open={open}>
-                <DialogTitle> + New Customer</DialogTitle>
+                <DialogTitle>Edit Customer</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
