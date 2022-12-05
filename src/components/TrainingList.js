@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-material.css';
+
+// Buttons
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+// Notification
+import Snackbar from '@mui/material/Snackbar'
+
+// Own js
 import Addtraining from "./Addtraining";
 import Edittraining from "./Edittraining";
-import dayjs from 'dayjs'
+
+// Date fns format
 import { format } from 'date-fns'
 
+// CSS files
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-material.css';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
@@ -16,10 +25,16 @@ function TrainingList() {
 
     // List of trainings
     const [trainings, setTrainings] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
 
     // URL for data
-    const trainingListUrl = 'https://customerrest.herokuapp.com/gettrainings'
-    const trainingsUrl = 'https://customerrest.herokuapp.com/api/trainings'
+    const trainingListUrl = 'https://customerrest.herokuapp.com/gettrainings';
+    const trainingsUrl = 'https://customerrest.herokuapp.com/api/trainings';
+
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     // Fetching trainings from Heroku link
     const fetchTrainings = () => {
@@ -44,26 +59,35 @@ function TrainingList() {
         })
             .then((response) => {
                 if (response.ok) {
+                    setMsg('New Training added successfully');
+                    setOpen(true);
                     fetchTrainings();
+                } else {
+                    alert('Something went wrong...');
                 }
-            });
-    };
+            })
+            .catch(err => console.error(err))
+
+    }
 
     // Delete Training -method
     const deleteTraining = (url) => {
-        if (window.confirm('Are you sure?')) {
+        if (window.confirm('Delete this training?')) {
             fetch(url, {
                 method: 'DELETE'
             })
                 .then(response => {
                     if (response.ok) {
+                        setMsg('Training deleted successfully')
+                        setOpen(true)
                         fetchTrainings();
                     } else {
-                        alert('Something went wrong');
+                        alert('Something went wrong...');
                     }
                 })
                 .catch(err => console.error(err))
         }
+        setOpen(false);
     }
 
     // Edit Training -method
@@ -73,13 +97,21 @@ function TrainingList() {
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify(updatedTraining)
         })
-            .then(_ => {
-                fetchTrainings();
-
+            .then(response => {
+                if (response.ok) {
+                    setMsg('Changes saved')
+                    setOpen(true)
+                    fetchTrainings();
+                } else {
+                    alert('Something went wrong...');
+                }
             })
             .catch(err => console.error(err))
+        setOpen(false);
+
     }
 
+    // Format for date
     const dateValueGetter = (trainings) => {
         const formattedDate = format(new Date(trainings.data.date), 'dd.MM.yyyy HH:mm')
         return formattedDate;
@@ -88,6 +120,7 @@ function TrainingList() {
     // Table Columns
     const [columnDefs, setColumnDefs] = useState([
         {
+            headerName: "Date and Time",
             field: "date",
             valueGetter: dateValueGetter,
             width: 200,
@@ -143,6 +176,12 @@ function TrainingList() {
                         pagination={true}
                     />
                 </div>
+                <Snackbar
+                    open={open}
+                    message={msg}
+                    autoHideDuration={4000}
+                    onClose={handleClose}
+                />
             </div>
         </div>
     );

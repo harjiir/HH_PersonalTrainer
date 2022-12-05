@@ -62,9 +62,10 @@ function Edittraining(props) {
                     <TextField
                         autoFocus
                         name="date"
+                        format='dd.MM.yyyy HH:mm'
                         value={training.date}
                         margin="dense"
-                        type="date"
+                        type="datetime-local"
                         fullWidth
                         variant="standard"
                         onChange={inputChanged}
