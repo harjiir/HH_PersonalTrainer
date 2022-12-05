@@ -77,20 +77,20 @@ function CustomerList() {
     const [columnDefs, setColumnDefs] = useState([
         {
             field: "firstname",
-            width: 180,
+            width: 150,
             sortable: true,
             filter: true,
         },
         {
             field: "lastname",
-            width: 180,
+            width: 150,
             sortable: true,
             filter: true
         },
         {
             headerName: 'Address',
             field: "streetaddress",
-            width: 240,
+            width: 220,
             sortable: true,
             filter: true
         },
@@ -109,22 +109,27 @@ function CustomerList() {
         },
         {
             field: 'email',
-            width: 200,
+            width: 220,
             sortable: true,
             filter: true,
         },
         {
             field: 'phone',
-            width: 200,
+            width: 150,
             sortable: true,
             filter: true,
         },
         {
             headerName: '',
             field: 'links.0.href',
-            width: 100,
-            cellRenderer: params =>
-                <Editcustomer editCustomer={editCustomer} customer={params} />
+            width: 90,
+            cellRenderer: params => <Editcustomer editCustomer={editCustomer} customer={params} />
+        },
+        {
+            headerName: '',
+            field: 'links.0.href',
+            width: 90,
+            cellRenderer: params => <Editcustomer editCustomer={editCustomer} customer={params} />
         },
         {
             headerName: '',

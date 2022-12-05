@@ -5,6 +5,8 @@ import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 function Editcustomer(props) {
     const [open, setOpen] = useState(false);
@@ -59,7 +61,9 @@ function Editcustomer(props) {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>EDIT</Button>
+            <IconButton color="primary" onClick={handleClickOpen}>
+                <ModeEditIcon />
+            </IconButton>
             <Dialog onClose={handleClose} open={open}>
                 <DialogTitle>Edit Customer</DialogTitle>
                 <DialogContent>

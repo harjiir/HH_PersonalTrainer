@@ -17,9 +17,9 @@ function App() {
 
   return (
     <div>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ bgcolor: '#B67C9A' }}>
         <Toolbar>
-          <Typography variant="h6">
+          < Typography variant="h6">
             HH PersonalTrainer
           </Typography>
           <Box sx={{ width: '50%', margin: 'auto' }}>
@@ -28,7 +28,7 @@ function App() {
               onChange={handleChange}
               textColor="inherit"
               variant="fullWidth"
-              aria-label="full width tabs example"
+              aria-label="full width tabs"
             >
               <Tab value="1" label="Home" />
               <Tab value="2" label="Trainings" />
@@ -36,13 +36,13 @@ function App() {
             </Tabs>
           </Box>
         </Toolbar>
-      </AppBar>
+      </AppBar >
       <div class="content">
         {value === '1' && <Home />}
         {value === '2' && <TrainingList />}
         {value === '3' && <CustomerList />}
       </div>
-    </div>
+    </div >
   );
 }
 
