@@ -157,7 +157,7 @@ function CustomerList() {
             field: 'links.0.href',
             width: 60,
             cellRenderer: params =>
-                <IconButton color="primary">
+                <IconButton color="success">
                     <AddCircleOutlineIcon />
                 </IconButton>
         },

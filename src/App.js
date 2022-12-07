@@ -1,4 +1,3 @@
-import './App.css';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import * as React from 'react';
 
@@ -12,6 +11,8 @@ import Home from './components/Home.js'
 import CustomerList from './components/CustomerList.js'
 import TrainingList from './components/TrainingList.js'
 import Calendar from './components/Calendar.js'
+
+import './App.css';
 
 function App() {
   const [value, setValue] = React.useState('1');
