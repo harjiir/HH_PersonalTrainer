@@ -11,6 +11,7 @@ import Home from './components/Home.js'
 import CustomerList from './components/CustomerList.js'
 import TrainingList from './components/TrainingList.js'
 import Calendar from './components/Calendar.js'
+import Statistics from './components/Statistics.js'
 
 import './App.css';
 
@@ -40,6 +41,7 @@ function App() {
               <Tab value="2" label="Trainings" />
               <Tab value="3" label="Customers" />
               <Tab value="4" label="Calendar" />
+              <Tab value="5" label="Statistics " />
             </Tabs>
           </Box>
         </Toolbar>
@@ -49,6 +51,7 @@ function App() {
         {value === '2' && <TrainingList />}
         {value === '3' && <CustomerList />}
         {value === '4' && <Calendar />}
+        {value === '5' && <Statistics />}
       </div>
     </div >
   );
